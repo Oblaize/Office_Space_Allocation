@@ -1,5 +1,5 @@
 from unittest import TestCase
-from Dojo import Dojo
+from src.Dojo import Dojo
 
 class TestCaseDojo(TestCase):
     def test_create_room_with_room_type_not_string_raises_ValueError(self):
@@ -15,12 +15,12 @@ class TestCaseDojo(TestCase):
     def test_if_room_type_not_office_raises_ValueError(self):
         dojo = Dojo()
         with self.assertRaises(ValueError):
-            dojo.create_room('office', 'AQ')
+            dojo.create_room('office', 7)
 
     def test_if_room_type_not_livingspace_raises_ValueError(self):
         dojo = Dojo()
         with self.assertRaises(ValueError):
-            dojo.create_room('livingspace', 'AQ')
+            dojo.create_room('livingspace', 4)
 
     def test_if_room_name_exists_after_creation(self):
         dojo = Dojo()
@@ -29,9 +29,9 @@ class TestCaseDojo(TestCase):
 
     def test_if_room_name_exists_raise_ValueError(self):
         dojo = Dojo()
-        dojo.create_room('Office', 'AA')
+        dojo.create_room('Office', 6)
         with self.assertRaises(ValueError):
-            dojo.create_room('Office', 'AA')
+            dojo.create_room('Office', 6)
 
 if __name__ == '__main__':
     unittest.main()
