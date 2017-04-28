@@ -239,7 +239,7 @@ class DojoApplication(cmd.Cmd):
     @docopt_cmd
     def do_quit(self, arg):
         '''Usage: quit '''
-        print('Are you sure you want to exit from Dojo?)
+        print('Are you sure you want to exit from Dojo')
         quit_app = getch.getch().lower()
         while quit_app not in ('yes', 'y', 'no', 'n'):
             print(
@@ -248,7 +248,7 @@ class DojoApplication(cmd.Cmd):
         if quit_app in ('n', 'no'):
             pass
         else:
-            print('Do you wish to save the current running state?)
+            print('Do you wish to save the current running state?')
             save = getch.getch().lower()
             while save not in ('yes', 'y', 'no', 'n'):
                 print(
@@ -260,7 +260,7 @@ class DojoApplication(cmd.Cmd):
                 print(self.dojo.save_state())
             else:
                 print(
-                    'Dojo state has not been saved!'
+                    'Dojo state has not been saved!')
             print('SEE YOU WHEN YOU SEE ME!!!')
             exit()
 
