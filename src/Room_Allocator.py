@@ -51,8 +51,8 @@ def docopt_cmd(func):
         except DocoptExit as error:
             # The DocoptExit is thrown when the args do not match.
             # We print a message to the user and the usage block.
-            cprint('Invalid Command!', 'white', 'on_red')
-            cprint(error, 'white', 'on_red')
+            print('Invalid Command!')
+            print(error)
             return
         except SystemExit:
             # The SystemExit exception prints the usage for --help
@@ -69,7 +69,7 @@ BORDER = colored("*" * 20, 'green').center(80)
 def introduction():
     '''Print Dojo's introduction'''
     print(BORDER)
-    cprint('THE DOJO ROOM ALLOCATOR!'.center(70), 'white', 'on_cyan')
+    print('THE DOJO ROOM ALLOCATOR!')
     print(__doc__)
     print(BORDER)
 
@@ -77,19 +77,17 @@ def introduction():
 class DojoApplication(cmd.Cmd):
     '''Dojo's interaction point with the terminal'''
     dojo = Dojo()
-    cprint("Do you want to load previous state? ",
-           "white", "on_cyan")
+    print("Do you want to load previous state? ")
     load_state = getch.getch().lower()
     while load_state not in ('y', 'yes', 'n', 'no'):
-        cprint(
-            '{} is not allowed. Type n, no, y or yes!!'.format(load_state),
-            'white', 'on_cyan')
+        print(
+            '{} is not allowed. Type n, no, y or yes!!'.format(load_state))
         load_state = getch.getch().lower()
     if load_state in ('y', 'yes'):
         print(dojo.load_state( 'dojo.sqlite'))
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
-    cprint(figlet_format('DOJO', font='isometric3'), 'green', attrs=['bold'])
+    print(figlet_format('DOJO', font='isometric3'))
     prompt = 'ANDELA DOJO '
 
     @docopt_cmd
@@ -101,11 +99,11 @@ class DojoApplication(cmd.Cmd):
             try:
                 print(self.dojo.create_room(room_type, room))
             except Exception as error:
-                cprint(error, 'white', 'on_red')
+                print(error)
 
     @docopt_cmd
-    def do_check(self, arg):
-        '''Usage: check room_type <type> | (room_availability |person)
+    def do_check_room_type(self, arg):
+        '''Usage: check_room_type <type> | (room_availability |person)
             <name>...'''
         try:
             name = ' '.join(arg['<name>']).lower()
@@ -153,7 +151,7 @@ class DojoApplication(cmd.Cmd):
             else:
                 print(self.dojo.add_person(role, name))
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_allocate_space(self, arg):
@@ -162,7 +160,7 @@ class DojoApplication(cmd.Cmd):
             person_name = ' '.join(arg['<name>'])
             print(self.dojo.allocate_person(person_name))
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_reallocate_person(self, arg):
@@ -172,7 +170,7 @@ class DojoApplication(cmd.Cmd):
             room = arg['<new_room_name>']
             print(self.dojo.reallocate_person(person, room))
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_remove_person(self, arg):
@@ -188,10 +186,10 @@ class DojoApplication(cmd.Cmd):
             else:
                 print(self.dojo.remove_person(person))
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
-    def do_load(self, arg):
+    def do_load_people(self, arg):
         '''Usage: load (<people>|<rooms>) <filename> | state <database>'''
         print(arg)
         try:
@@ -202,17 +200,17 @@ class DojoApplication(cmd.Cmd):
             elif arg['state']:
                 self.dojo.load_state(arg['<database>'])
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_print_room(self, arg):
         '''Usage: print_room <room_name> | (allocations|unallocated)
         [--O=filename]'''
         try:
-            myfile =open("filename.txt", "w")
-            if arg['room']:
+           
+            if arg['<room_name>']:
                 print(self.dojo.print_room(arg['<room_name>']))
-                myfile.write(self.dojo.print_room(arg['<room_name>'])+"\n")
+               
             elif arg['allocations']:
                 if arg['--O']:
                     print(self.dojo.print_allocations(filename=arg['--o']))
@@ -223,9 +221,9 @@ class DojoApplication(cmd.Cmd):
                     print(self.dojo.print_unallocated(filename=arg['--o']))
                 else:
                     print(self.dojo.print_unallocated())
-                myfile.close()
+               
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_save_state(self, arg):
@@ -236,39 +234,34 @@ class DojoApplication(cmd.Cmd):
             else:
                 print(self.dojo.save_state())
         except Exception as error:
-            cprint(error, 'white', 'on_red')
+            print(error)
 
     @docopt_cmd
     def do_quit(self, arg):
         '''Usage: quit '''
-        cprint('Are you sure you want to exit from Dojo?',
-               'white', 'on_cyan')
+        print('Are you sure you want to exit from Dojo?)
         quit_app = getch.getch().lower()
         while quit_app not in ('yes', 'y', 'no', 'n'):
-            cprint(
-                '{} is not allowed. Type n, no, y or yes!!'.format(quit_app),
-                'white', 'on_cyan')
+            print(
+                '{} is not allowed. Type n, no, y or yes!!'.format(quit_app))
             quit_app = getch.getch().lower()
         if quit_app in ('n', 'no'):
             pass
         else:
-            cprint('Do you wish to save the current running state?',
-                   'white', 'on_cyan')
+            print('Do you wish to save the current running state?)
             save = getch.getch().lower()
             while save not in ('yes', 'y', 'no', 'n'):
-                cprint(
-                    '{} is not allowed. Type n, no, y or yes!!'.format(save),
-                    'white', 'on_cyan')
+                print(
+                    '{} is not allowed. Type n, no, y or yes!!'.format(save))
                 save = getch.getch().lower()
             # clear screen before exit
             self.do_clear(arg)
             if save in ('yes', 'y'):
                 print(self.dojo.save_state())
             else:
-                cprint(
-                    'Dojo state has not been saved!'.center(70),
-                    'white', 'on_cyan')
-            cprint('SEE YOU WHEN YOU SEE ME!!!'.center(70), 'white', 'on_cyan')
+                print(
+                    'Dojo state has not been saved!'
+            print('SEE YOU WHEN YOU SEE ME!!!')
             exit()
 
     @docopt_cmd
